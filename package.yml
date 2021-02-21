@@ -12,7 +12,7 @@ Resources:
       FunctionName: resumeChecker
       Description: Check the jasoniharris website is alive
       Handler: function.handler
-      CodeUri: s3://jasoniharris-resume-checker/dcf38534f9babc55e1b86da2f5e9362a
+      CodeUri: s3://jasoniharris-resume-checker/9e69105db10aff72b07a53a3ec4f6757
       Runtime: python3.6
       MemorySize: 128
       Timeout: 30
@@ -26,7 +26,7 @@ Resources:
     Type: AWS::Events::Rule
     Properties:
       Description: ScheduledRule
-      ScheduleExpression: rate(10 minutes)
+      ScheduleExpression: rate(6 hours)
       State: ENABLED
       Targets:
       - Arn:
