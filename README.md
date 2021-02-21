@@ -11,6 +11,6 @@ This repository contains the Lambda Function code to check the jasoniharris.com 
 * [README.md](README.md)
 
 ### Instructions
-Run the deploy.sh: This will deploy the Lambda function to CloudFormation via a CodePipeline.
+Run the deploy.sh: This will deploy the Lambda function via the SAM framework.
  
  

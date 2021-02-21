@@ -6,13 +6,13 @@ Parameters:
   SNSTOPIC:
     Type: String
 Resources:
-  happyfaceCheckerFunction:
+  resumeCheckerFunction:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: resumeChecker
       Description: Check the jasoniharris website is alive
       Handler: function.handler
-      CodeUri: s3://jasoniharris-resume-checker/c8b1f62eea02c0e6c2212950abee02a0
+      CodeUri: s3://jasoniharris-resume-checker/dcf38534f9babc55e1b86da2f5e9362a
       Runtime: python3.6
       MemorySize: 128
       Timeout: 30
@@ -22,3 +22,26 @@ Resources:
         Variables:
           SNSTOPIC:
             Ref: SNSTOPIC
+  ScheduledRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: ScheduledRule
+      ScheduleExpression: rate(10 minutes)
+      State: ENABLED
+      Targets:
+      - Arn:
+          Fn::GetAtt:
+          - resumeCheckerFunction
+          - Arn
+        Id: TargetFunctionV1
+  PermissionForEventsToInvokeLambda:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName:
+        Ref: resumeCheckerFunction
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn:
+        Fn::GetAtt:
+        - ScheduledRule
+        - Arn

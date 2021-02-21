@@ -7,7 +7,7 @@ Parameters:
     Type: String
 
 Resources:
-  happyfaceCheckerFunction:
+  resumeCheckerFunction:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: resumeChecker
@@ -21,3 +21,26 @@ Resources:
       Environment:
         Variables:
           SNSTOPIC: !Ref SNSTOPIC
+  ScheduledRule: 
+    Type: AWS::Events::Rule
+    Properties: 
+      Description: "ScheduledRule"
+      ScheduleExpression: "rate(10 minutes)"
+      State: "ENABLED"
+      Targets: 
+        - 
+          Arn: 
+            Fn::GetAtt: 
+              - "resumeCheckerFunction"
+              - "Arn"
+          Id: "TargetFunctionV1"
+  PermissionForEventsToInvokeLambda: 
+    Type: AWS::Lambda::Permission
+    Properties: 
+      FunctionName: !Ref "resumeCheckerFunction"
+      Action: "lambda:InvokeFunction"
+      Principal: "events.amazonaws.com"
+      SourceArn: 
+        Fn::GetAtt: 
+          - "ScheduledRule"
+          - "Arn"
